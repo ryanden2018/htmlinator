@@ -1,14 +1,13 @@
 # Tokenize an HTML document represented as a string.
 
 
-# TODO: delete comments of all types in JS, CSS, HTML, before proceeding to tokenization
-
 def tokenize(htmldoc)
   quotes = '\'"'
   quote = nil
   in_tag = false
   in_script = false
   in_css = false
+  in_comment = false
   escaped = false
 
   tokens = []
@@ -23,6 +22,7 @@ def tokenize(htmldoc)
       in_tag = false
       in_css = false
       escaped = false
+      in_comment = false
       token << htmldoc[i]
       tokens << token
       token = ""
@@ -32,10 +32,11 @@ def tokenize(htmldoc)
       quote = nil
       in_tag = false
       escaped = false
+      in_comment = false
       token << htmldoc[i]
       tokens << token
       token = ""
-    elsif quote
+    elsif quote && !in_comment
       if (htmldoc[i] == quote) && (!in_script || !escaped)
         quote = nil
       end
@@ -49,9 +50,16 @@ def tokenize(htmldoc)
       end
 
       token << htmldoc[i]
-    elsif quotes.include?(htmldoc[i])
+    elsif quotes.include?(htmldoc[i]) && !in_comment
       quote = htmldoc[i]
       token << htmldoc[i]
+    elsif token.start_with?('<!-') && (htmldoc[i]=='-')
+      in_comment = true
+      in_tag = false
+      token << htmldoc[i]
+    elsif in_comment && token.end_with?('--') && (htmldoc[i]=='>')
+      in_comment = false
+      token = ""
     elsif in_tag && (htmldoc[i] == '>')
       in_tag = false
       token << htmldoc[i]
@@ -64,7 +72,7 @@ def tokenize(htmldoc)
         tokens << token
         token = ""
       end
-    elsif (htmldoc[i] == '<') && !in_script && !in_css
+    elsif (htmldoc[i] == '<') && !in_script && !in_css && !in_comment
       in_tag = true
       tokens << token
       token = htmldoc[i]
