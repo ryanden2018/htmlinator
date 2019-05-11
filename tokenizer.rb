@@ -53,7 +53,7 @@ def tokenize(htmldoc)
     elsif quotes.include?(htmldoc[i]) && !in_comment
       quote = htmldoc[i]
       token << htmldoc[i]
-    elsif token.start_with?('<!-') && (htmldoc[i]=='-')
+    elsif (token=='<!-') && (htmldoc[i]=='-')
       in_comment = true
       in_tag = false
       token << htmldoc[i]
