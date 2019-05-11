@@ -2,7 +2,7 @@
 
 
 def tokenize(htmldoc)
-  quotes = '\'"'
+  quotes = '\'"`'
   quote = nil
   in_tag = false
   in_script = false
