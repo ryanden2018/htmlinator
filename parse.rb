@@ -57,7 +57,7 @@ def find_depths(htmldoc)
       if is_opening_tag(token) && !is_self_closing_tag(token)
         results << [token,tag_stack.length]
         tag_stack << tag
-      elsif is_closing_tag(token)
+      elsif is_closing_tag(token) && tag_stack.include?(tag)
         until (tag_stack.pop==tag) || (tag_stack.length==0)
         end
         results << [token,tag_stack.length]
