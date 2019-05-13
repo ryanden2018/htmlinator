@@ -59,6 +59,8 @@ def tokenize(htmldoc)
       token << htmldoc[i]
     elsif in_comment && token.end_with?('--') && (htmldoc[i]=='>')
       in_comment = false
+      token << htmldoc[i]
+      tokens << token
       token = ""
     elsif in_tag && (htmldoc[i] == '>')
       in_tag = false
