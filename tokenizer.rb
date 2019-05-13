@@ -1,4 +1,7 @@
 # Tokenize an HTML document represented as a string.
+#[ ["<html>",0], ["<head>",1], ["<title>",2], ["some title text",3], ["</title>",2]
+#  ["</head>",1], ["<body>",1], ... ] 
+# stack = ["html","head","body"] 
 
 
 def tokenize(htmldoc)
