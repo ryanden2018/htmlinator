@@ -15,7 +15,10 @@ def tokenize(htmldoc)
   token = ""
 
   while i < htmldoc.length
-    if in_script && token.downcase.include?("</script") && (htmldoc[i] == '>')
+    if in_script && (
+       (token.downcase.include?("</script") && (htmldoc[i] == '>')) ||
+       (!token.downcase.include?(">") && token.downcase.strip.end_with?("/") && (htmldoc[i] == '>'))
+    )
       in_script = false
       quote = nil
       in_tag = false
